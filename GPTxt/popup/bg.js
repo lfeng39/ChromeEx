@@ -1,0 +1,7 @@
+
+
+function aaa()
+{
+    alert('bg')
+      
+}

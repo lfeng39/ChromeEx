@@ -1,0 +1,55 @@
+{
+    "manifest_version": 3,
+    "name": "GPTAPI-Test",
+    "description": "GPTAPI-Test",
+    "version": "1.0",
+    "author":
+    {
+        "email": "lfeng0309@gmail.com"
+    },
+    "icons":
+    {
+        "128":"images/jal-128.png"
+    },
+    "action":
+    {
+        "default_popup": "popup/popup.html",
+        "default_icon": "images/jal-128.png",
+        "default_title": "addListenerTabURL"
+    },
+    "permissions":
+    [
+        "tabs",
+        "activeTab",
+        "scripting",
+
+        "sidePanel",
+        "storage",
+        "alarms"
+    ],
+    "omnibox":
+    {
+        "keyword": "newTab"
+    },
+    "host_permissions":
+    [
+        "http://*/*",
+        "https://*/*"
+    ],
+    "content_scripts":
+    [
+        {
+            "matches": ["<all_urls>"],
+            "js": ["scripts/content.js"]
+        }
+    ],
+    "background":
+    {
+        "service_worker": "service-worker.js",
+        "type": "module"
+    },
+    "side_panel":
+    {
+        "default_path": "sidepanel/sidepanel.html"
+    }
+}
