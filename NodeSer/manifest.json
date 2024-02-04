@@ -1,0 +1,49 @@
+{
+    "manifest_version": 3,
+    "name": "nodeSerTest",
+    "description": "nodeSerTest",
+    "version": "1.0",
+    "author":
+    {
+        "email": "lfeng0309@gmail.com"
+    },
+    "icons":
+    {
+        "128":"images/jal-128.png"
+    },
+    "action":
+    {
+        "default_icon": "images/jal-128.png",
+        "default_title": "nodeSerTest"
+    },
+    "permissions":
+    [
+        "tabs",
+        "activeTab",
+        "scripting",
+        "sidePanel",
+        "storage",
+        "alarms"
+    ],
+    "omnibox":
+    {
+        "keyword": "newTab"
+    },
+    "host_permissions":
+    [
+        "http://*/*",
+        "https://*/*"
+    ],
+    "content_scripts":
+    [
+        {
+            "matches": ["<all_urls>"],
+            "js": ["content.js"]
+        }
+    ],
+    "background":
+    {
+        "service_worker": "service-worker.js",
+        "type": "module"
+    }
+}

@@ -8,12 +8,34 @@
 // console.log(lan)
 
 
-const http = require('http');
-const data = {content: 'como on'}
-let server = http.createServer(function (request, response)
-    {
-        response.write(data)
-        response.end()
-    }
-)
+const http = require('http')
+let server = http.createServer(gptSer)
 server.listen(8080)
+
+// const data = {
+//     post: 'post',
+//     rsp: 'lfeng39'
+// }
+
+
+function gptSer(request, response)
+{
+    let data = ''
+    request.on('data', (chunk) => {
+        data += chunk;
+        // console.log('Received data:', JSON.parse(chunk));
+        // response.end(chunk);
+      });
+  
+      request.on('end', () => {
+        console.log('Received data:', data);
+        // response.setHeader('Content-Type', 'application/json')
+        // response.end(JSON.stringify(data));
+        response.end(data)
+      });
+    // let url = request.url
+    // response.setHeader('Content-Type', 'application/json')
+    // console.log(request.on('request'))
+    // response.write(JSON.stringify(data))
+    
+}
