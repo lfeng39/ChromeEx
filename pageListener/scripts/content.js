@@ -13,9 +13,10 @@ chrome.runtime.onMessage.addListener(function(request, sender, response)
     </div>
     `
     // create ai module
-    if(window.screen.availHeight < 830)
+    if(window.screen.availHeight < 1000)
     {
-        a_i_regnerate_module_div.style = 'display: none; position: fixed; z-index:1000; width: 100%; height: 100%; padding-top:'+ (window.screen.availHeight*0.5-window.screen.availHeight*0.6*0.8) +'px; background-color: rgb(0, 0, 0, 0.6);'
+        // alert('hei / '+document.body.offsetHeight + ' / ' + window.screen.availHeight)
+        a_i_regnerate_module_div.style = 'display: none; position: fixed; z-index:1000; width: 100%; height: 100%; padding-top:'+ (window.screen.availHeight*0.5-window.screen.availHeight*0.6*0.9) +'px; background-color: rgb(0, 0, 0, 0.6);'
     }
     a_i_regnerate_module_div.style = 'display: none; position: fixed; z-index:1000; width: 100%; height: 100%; padding-top:'+ (window.screen.availHeight*0.5-window.screen.availHeight*0.6*0.6) +'px; background-color: rgb(0, 0, 0, 0.6);'
     a_i_regnerate_module_div.id = 't_b_bg'
@@ -49,7 +50,6 @@ chrome.runtime.onMessage.addListener(function(request, sender, response)
     document.getElementById('ai_btn').onclick = aiRegnerate
     document.getElementById('closed').onclick = closed
     document.getElementById('closed').style.cursor = 'pointer'
-    // alert('hei / '+document.body.offsetHeight + ' / ' + window.screen.availHeight)
 })
 
 function aiRegnerate()
@@ -72,29 +72,27 @@ function aiRegnerate()
         bullets.push(tagP)
     }
     // console.log('bullets', typeof bullets, bullets)
-    // sendResponse({ html: pageHTML });
     document.getElementById('bullets').children[1].innerHTML = '<h1 style="font-size: 18px; line-height: 18px; margin-bottom: 15px;">' + title + '</h1>'
     document.getElementById('bullets').children[2].innerHTML = bullets.join('')
 
     const main_width = window.getComputedStyle(dp)['max-width']
-    console.log('main_width',main_width)
+    // console.log('main_width',main_width)
     document.getElementById('t_b_bg').style.display = ''
     // main_dp_width value for ai module
-    if(window.screen.availHeight < 830)
+    if(window.screen.availHeight < 1000)
     {
-        document.getElementById('t_b').style = 'max-width:'+ main_width +'; height:'+ window.screen.availHeight*0.8 +'px; border-radius:8px; background-color: rgb(250, 250, 250, 0.8); margin: 0 auto; padding: 20px;'
+        document.getElementById('t_b').style = 'max-width:'+ main_width +'; height:'+ window.screen.availHeight*0.9 +'px; border-radius:8px; background-color: rgb(250, 250, 250, 0.8); margin: 0 auto; padding: 20px; overflow: hidden; overflow-y: scroll;'
     }
-    document.getElementById('t_b').style = 'max-width:'+ main_width +'; height:'+ window.screen.availHeight*0.6 +'px; border-radius:8px; background-color: rgb(250, 250, 250, 0.8); margin: 0 auto; padding: 20px;'
+    document.getElementById('t_b').style = 'max-width:'+ main_width +'; height:'+ window.screen.availHeight*0.6 +'px; border-radius:8px; background-color: rgb(250, 250, 250, 0.8); margin: 0 auto; padding: 20px; overflow: hidden; overflow-y: scroll;'
     
     chrome.runtime.sendMessage(
         { action: "aiRegnerate", listing_title: title, listing_bullet: bullets },
         function(request)
         {
-            document.getElementById('gptRspTitle').innerHTML = "request['messages']"
+            document.getElementById('gptRspTitle').innerHTML = request.messages
             console.log('request>>>>>>>>>>>>>>>>>>>>>',request)
-        })
-
-
+        }
+    )
 }
 function closed()
 {

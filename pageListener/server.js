@@ -26,9 +26,11 @@ function serTest(request, response) {
     // print(test.choices[0].message.content)
 
     request.on('end', () => {
-        console.log('Received data:', data);
-        // response.setHeader('Content-Type', 'application/json')
-        // response.end(JSON.stringify(data));
+        console.log('Received data:', data)
+        console.log('data type:', typeof(data))
+        console.log('\n')
+        response.setHeader('Content-Type', 'application/json')
+        // response.end(JSON.stringify(data))
         response.end(data)
     });
     // let url = request.url

@@ -1,5 +1,5 @@
 chrome.runtime.onInstalled.addListener(() => {
-  console.log('service-worker')
+  console.log('pageListener-worker')
   chrome.action.setBadgeText(
     {
       text: 'eyes',
@@ -32,80 +32,78 @@ chrome.runtime.onMessage.addListener(function(request, sender, response)
 {
   if(request.action === 'popup')
   {
-      const html = request.pageHTML
-      console.log(typeof html, html)
-      const popupURL = 'popup/popup-win.html?html=' + 'htmlCode'
-      chrome.windows.create(
+    const html = request.pageHTML
+    console.log(typeof html, html)
+    const popupURL = 'popup/popup-win.html?html=' + 'htmlCode'
+    chrome.windows.create(
+      {
+        url: chrome.runtime.getURL(popupURL),
+        type: 'popup',
+        width: 800,
+        height: 800,
+        // top: msg.screeny,
+        // left: msg.screenx
+      },
+      function(popupWindow)
+      {
+        chrome.tabs.onUpdated.addListener(function(tabId, changeInfo, tab)
         {
-          url: chrome.runtime.getURL(popupURL),
-          type: 'popup',
-          width: 800,
-          height: 800,
-          // top: msg.screeny,
-          // left: msg.screenx
-        },
-        function(popupWindow) {
-          chrome.tabs.onUpdated.addListener(function(tabId, changeInfo, tab) {
-            if (tabId === popupWindow.tabs[0].id && changeInfo.status === 'complete') {
-              // 弹窗加载完成后发送数据
-              chrome.tabs.sendMessage(tabId, { action: 'fillData', data: html });
-            }
-          });
-        }
-      )
-      
+          if (tabId === popupWindow.tabs[0].id && changeInfo.status === 'complete')
+          {
+            chrome.tabs.sendMessage(tabId, { action: 'fillData', data: html });
+          }
+        });
+      }
+    )
   }
   if(request.action === 'aiRegnerate')
   {
-    console.log(request.message)
+    console.log('aiRegnerate requeset msg:', request.listing_title)
     const j21_api_key = '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'
-    const postUrl = 'http://localhost:8080';
+    const postUrl = ['http://localhost:8080', 'https://api.openai.com/v1/chat/completions']
     // const postUrl = 'https://api.openai.com/v1/chat/completions';
-    fetch
-    (
-      postUrl,
+    const headers = {
+      'Content-Type': 'application/json',
+      // 'Authorization': `Bearer ${j21_api_key}`,
+    }
+    const data = {
+      messages: request.listing_title,
+      // bullet: request.listing_bullet
+      // model: "gpt-3.5-turbo",
+      // messages: [
+      //     // {
+      //     //     "role": "system",
+      //     //     "content": "You are a helpful assistant."
+      //     // },
+      //     {
+      //         "role" : "user",
+      //         "content": request.message
+      //     }
+      // ]
+    }
+    fetch(postUrl[0], {method: 'POST', headers: headers, body: JSON.stringify(data)})
+      .then(response =>
       {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          // 'Authorization': `Bearer ${j21_api_key}`,
-        },
-        body: JSON.stringify(
-          {
-            messages: request.listing_title,
-            bullet: request.listing_bullet
-            // model: "gpt-3.5-turbo",
-            // messages: [
-            //     // {
-            //     //     "role": "system",
-            //     //     "content": "You are a helpful assistant."
-            //     // },
-            //     {
-            //         "role" : "user",
-            //         "content": request.message
-            //     }
-            // ]
-          }
-        )
-      }
-    )
-      .then(response => {
         if (!response.ok) {
-          throw new Error(`Network response was not ok, status: ${response.status}`);
+          throw new Error(`Network response was not ok, fetch respone status: ${response.status}`)
         }
-        return response.json();
+        return response.json()
       })
-      .then(data => {
-        // 处理 API 返回的数据
-        // console.log('API Health Response:', data.messages);
-        console.log('API Health Response:', data);
-        // response(data['messages'])
+      .then(data =>
+      {
+        // console.log('API Health Response:', data.messages)
+        // const da = data
+        // console.log('nodeSer Response:', typeof(da), da)
+        console.log('nodeSer Response:', data.messages)
+        console.log('data type:', typeof(data.messages))
+        response(data)
         // const gptRsp = data.messages[0].content
         // const gptRsp = data.choices[0].message.content
-
       })
-      .catch(error => {
-        console.error('Error:', error);
-      });
+      .catch(error =>
+      {
+        console.error('fetchError:', error)
+      })
+    return true
   }
 })
