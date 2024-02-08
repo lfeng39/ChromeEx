@@ -16,9 +16,12 @@ chrome.runtime.onMessage.addListener(function(request, sender, response)
     if(window.screen.availHeight < 1000)
     {
         // alert('hei / '+document.body.offsetHeight + ' / ' + window.screen.availHeight)
-        a_i_regnerate_module_div.style = 'display: none; position: fixed; z-index:1000; width: 100%; height: 100%; padding-top:'+ (window.screen.availHeight*0.5-window.screen.availHeight*0.6*0.9) +'px; background-color: rgb(0, 0, 0, 0.6);'
+        a_i_regnerate_module_div.style = 'display: none; position: fixed; z-index:1000; width: 100%; height: 100%; padding-top:'+ (window.screen.availHeight*0.5-window.screen.availHeight*0.6*0.76) +'px; background-color: rgb(0, 0, 0, 0.6);'
     }
-    a_i_regnerate_module_div.style = 'display: none; position: fixed; z-index:1000; width: 100%; height: 100%; padding-top:'+ (window.screen.availHeight*0.5-window.screen.availHeight*0.6*0.6) +'px; background-color: rgb(0, 0, 0, 0.6);'
+    else
+    {
+        a_i_regnerate_module_div.style = 'display: none; position: fixed; z-index:1000; width: 100%; height: 100%; padding-top:'+ (window.screen.availHeight*0.5-window.screen.availHeight*0.6*0.6) +'px; background-color: rgb(0, 0, 0, 0.6);'
+    }
     a_i_regnerate_module_div.id = 't_b_bg'
     a_i_regnerate_module_div.innerHTML = `
     <div id="t_b">
@@ -26,18 +29,18 @@ chrome.runtime.onMessage.addListener(function(request, sender, response)
             <div><h1>LittleKris TEST</h1></div>
             <div><h1 id="closed">X</h1></div>
         </div>
-        <div style="display: flex; justify-content: space-between;">
-            <div id="bullets" style="width:33%; margin: 10px 0; padding: 10px; border-radius:8px; background-color: rgb(250, 250, 250, 0.8);">
+        <div style="display: flex; justify-content: space-between; height:90%; overflow: hidden; overflow-y: scroll;">
+            <div id="bullets" style="width:33%; height:100%; margin: 10px 0; padding: 10px; border-radius:8px; background-color: rgb(250, 250, 250, 0.8);">
                 <div><h1>Before</h1></div>
                 <div></div>
                 <div></div>
             </div>
-            <div style="width:33%; margin: 10px 0; padding: 10px; border-radius:8px; background-color: rgb(250, 250, 250, 0.8);">
+            <div style="width:33%; height:100%; margin: 10px 0; padding: 10px; border-radius:8px; background-color: rgb(250, 250, 250, 0.8);">
                 <div><h1>After</h1></div>
                 <div id="gptRspTitle"><h1>GPT-2</h1></div>
                 <div id="gptRspBullet"></div>
             </div>
-            <div style="width:33%; margin: 10px 0; padding: 10px; border-radius:8px; background-color: rgb(250, 250, 250, 0.8);">
+            <div style="width:33%; height:100%; margin: 10px 0; padding: 10px; border-radius:8px; background-color: rgb(250, 250, 250, 0.8);">
                 <div><h1>GPT-Regnerate</h1></div>
                 <div><h1>GPT-2</h1></div>
                 <div></div>
@@ -76,15 +79,17 @@ function aiRegnerate()
     document.getElementById('bullets').children[2].innerHTML = bullets.join('')
 
     const main_width = window.getComputedStyle(dp)['max-width']
-    // console.log('main_width',main_width)
+    console.log('window.screen.availHeight',window.screen.availHeight)
     document.getElementById('t_b_bg').style.display = ''
     // main_dp_width value for ai module
     if(window.screen.availHeight < 1000)
     {
-        document.getElementById('t_b').style = 'max-width:'+ main_width +'; height:'+ window.screen.availHeight*0.9 +'px; border-radius:8px; background-color: rgb(250, 250, 250, 0.8); margin: 0 auto; padding: 20px; overflow: hidden; overflow-y: scroll;'
+        document.getElementById('t_b').style = 'max-width:'+ main_width +'; height:'+ window.screen.availHeight*0.8 +'px; border-radius:8px; background-color: rgb(250, 250, 250, 0.8); margin: 0 auto; padding: 20px;'
     }
-    document.getElementById('t_b').style = 'max-width:'+ main_width +'; height:'+ window.screen.availHeight*0.6 +'px; border-radius:8px; background-color: rgb(250, 250, 250, 0.8); margin: 0 auto; padding: 20px; overflow: hidden; overflow-y: scroll;'
-    
+    else
+    {
+        document.getElementById('t_b').style = 'max-width:'+ main_width +'; height:'+ window.screen.availHeight*0.6 +'px; border-radius:8px; background-color: rgb(250, 250, 250, 0.8); margin: 0 auto; padding: 20px;'
+    }    
     chrome.runtime.sendMessage(
         { action: "aiRegnerate", listing_title: title, listing_bullet: bullets },
         function(request)
