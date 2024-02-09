@@ -58,30 +58,31 @@ chrome.runtime.onMessage.addListener(function(request, sender, response)
   }
   if(request.action === 'aiRegnerate')
   {
-    console.log('aiRegnerate requeset msg:', request.listing_title)
-    const j21_api_key = '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'
+    console.log('aiRegnerate requeset msg:', request.listing_bullets)
+    // const j21_api_key = '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'
+    const j21_api_key = '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'
     const postUrl = ['http://localhost:8080', 'https://api.openai.com/v1/chat/completions']
     // const postUrl = 'https://api.openai.com/v1/chat/completions';
     const headers = {
       'Content-Type': 'application/json',
-      // 'Authorization': `Bearer ${j21_api_key}`,
+      'Authorization': `Bearer ${j21_api_key}`,
     }
     const data = {
-      messages: request.listing_title,
-      // bullet: request.listing_bullet
-      // model: "gpt-3.5-turbo",
-      // messages: [
-      //     // {
-      //     //     "role": "system",
-      //     //     "content": "You are a helpful assistant."
-      //     // },
-      //     {
-      //         "role" : "user",
-      //         "content": request.message
-      //     }
-      // ]
+      // title: request.listing_title,
+      // bullets: request.listing_bullets
+      model: "gpt-3.5-turbo",
+      messages: [
+          // {
+          //     "role": "system",
+          //     "content": "You are a helpful assistant."
+          // },
+          {
+              "role" : "user",
+              "content": 'The amazon listing title is: ' + request.listing_title + ' and bullet points is: ' + request.listing_bullets + ', regenerate an amazon listing title and bullet points with an inspirational tone, each within 170-200 bytes'
+          }
+      ]
     }
-    fetch(postUrl[0], {method: 'POST', headers: headers, body: JSON.stringify(data)})
+    fetch(postUrl[1], {method: 'POST', headers: headers, body: JSON.stringify(data)})
       .then(response =>
       {
         if (!response.ok) {
@@ -94,9 +95,12 @@ chrome.runtime.onMessage.addListener(function(request, sender, response)
         // console.log('API Health Response:', data.messages)
         // const da = data
         // console.log('nodeSer Response:', typeof(da), da)
-        console.log('nodeSer Response:', data.messages)
-        console.log('data type:', typeof(data.messages))
-        response(data)
+        console.log('GPT-3.5 data:', data.choices[0])
+        console.log('\n')
+        console.log('GPT-3.5 messages:', data.choices[0].message)
+        console.log('\n')
+        console.log('GPT-3.5 Content:', data.choices[0].message.content)
+        response(data.choices[0].message.content)
         // const gptRsp = data.messages[0].content
         // const gptRsp = data.choices[0].message.content
       })

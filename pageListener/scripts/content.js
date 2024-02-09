@@ -15,7 +15,6 @@ chrome.runtime.onMessage.addListener(function(request, sender, response)
     // create ai module
     if(window.screen.availHeight < 1000)
     {
-        // alert('hei / '+document.body.offsetHeight + ' / ' + window.screen.availHeight)
         a_i_regnerate_module_div.style = 'display: none; position: fixed; z-index:1000; width: 100%; height: 100%; padding-top:'+ (window.screen.availHeight*0.5-window.screen.availHeight*0.6*0.76) +'px; background-color: rgb(0, 0, 0, 0.6);'
     }
     else
@@ -29,20 +28,26 @@ chrome.runtime.onMessage.addListener(function(request, sender, response)
             <div><h1>LittleKris TEST</h1></div>
             <div><h1 id="closed">X</h1></div>
         </div>
-        <div style="display: flex; justify-content: space-between; height:90%; overflow: hidden; overflow-y: scroll;">
-            <div id="bullets" style="width:33%; height:100%; margin: 10px 0; padding: 10px; border-radius:8px; background-color: rgb(250, 250, 250, 0.8);">
+        <div style="display: flex; justify-content: space-between; height:90%; border-radius:8px; background-color: rgb(250, 250, 250, 0.8); overflow: hidden; overflow-y: scroll;">
+            <div id="bullets" style="width:33%; height: auto; margin: 10px 0; padding: 10px;">
                 <div><h1>Before</h1></div>
+                <div><h5>Title</h5></div>
                 <div></div>
+                <div><h5>BulletPoint</h5></div>
                 <div></div>
             </div>
-            <div style="width:33%; height:100%; margin: 10px 0; padding: 10px; border-radius:8px; background-color: rgb(250, 250, 250, 0.8);">
-                <div><h1>After</h1></div>
+            <div style="width:33%; height: auto; margin: 10px 0; padding: 10px;">
+                <div><h1>A.I.Upgrade</h1></div>
+                <div><h5>Title</h5></div>
                 <div id="gptRspTitle"><h1>GPT-2</h1></div>
+                <div><h5>BulletPoint</h5></div>
                 <div id="gptRspBullet"></div>
             </div>
-            <div style="width:33%; height:100%; margin: 10px 0; padding: 10px; border-radius:8px; background-color: rgb(250, 250, 250, 0.8);">
+            <div style="width:33%; height: auto; margin: 10px 0; padding: 10px;">
                 <div><h1>GPT-Regnerate</h1></div>
+                <div><h5>Title</h5></div>
                 <div><h1>GPT-2</h1></div>
+                <div><h5>BulletPoint</h5></div>
                 <div></div>
             </div>
         </div>
@@ -63,23 +68,26 @@ function aiRegnerate()
     const parser = new DOMParser();
     const doc = parser.parseFromString(pageHTML, 'text/html');
     // const bullets_length = doc.getElementById('feature-bullets').children[0].children
-    const bullets_length = doc.getElementById('feature-bullets').getElementsByTagName('li')
-    console.log('.children', bullets_length)
+    const bullets_tag = doc.getElementById('feature-bullets').getElementsByTagName('li')
+    // console.log('.children', bullets_tag)
     const title = doc.getElementById('productTitle').innerText
     const bullets = []
-    for(i=0; i<bullets_length.length; i++)
+    const bullets_html = []
+    for(i=0; i<bullets_tag.length; i++)
     {
         // bullets.push(doc.getElementById('feature-bullets').children[2].children[i].innerText)
-        const tagP = '<p style="font-size:16px;">*' + bullets_length[i].innerText +'</p>'
+        const bullet = bullets_tag[i].innerText
+        const bullet_html = '<p style="font-size:14px; line-height: 18px;">*' + bullets_tag[i].innerText +'</p>'
         // console.log('???',tagP)
-        bullets.push(tagP)
+        bullets.push(bullet)
+        bullets_html.push(bullet_html)
     }
     // console.log('bullets', typeof bullets, bullets)
-    document.getElementById('bullets').children[1].innerHTML = '<h1 style="font-size: 18px; line-height: 18px; margin-bottom: 15px;">' + title + '</h1>'
-    document.getElementById('bullets').children[2].innerHTML = bullets.join('')
+    document.getElementById('bullets').children[2].innerHTML = '<h1 style="font-size: 16px; line-height: 18px; margin-bottom: 15px;">' + title + '</h1>'
+    document.getElementById('bullets').children[4].innerHTML = bullets_html.join('')
+    console.log('bullets:///',bullets)
 
     const main_width = window.getComputedStyle(dp)['max-width']
-    console.log('window.screen.availHeight',window.screen.availHeight)
     document.getElementById('t_b_bg').style.display = ''
     // main_dp_width value for ai module
     if(window.screen.availHeight < 1000)
@@ -91,10 +99,18 @@ function aiRegnerate()
         document.getElementById('t_b').style = 'max-width:'+ main_width +'; height:'+ window.screen.availHeight*0.6 +'px; border-radius:8px; background-color: rgb(250, 250, 250, 0.8); margin: 0 auto; padding: 20px;'
     }    
     chrome.runtime.sendMessage(
-        { action: "aiRegnerate", listing_title: title, listing_bullet: bullets },
+        { action: "aiRegnerate", listing_title: title, listing_bullets: bullets },
         function(request)
         {
-            document.getElementById('gptRspTitle').innerHTML = request.messages
+            document.getElementById('gptRspTitle').innerHTML = '<h1 style="font-size: 16px; line-height: 18px; margin-bottom: 15px;">' + request.title + '</h1>'
+            const rsp_bullets_html = []
+            for(i=0; i<request.bullets.length; i++)
+            {
+                // bullets.push(doc.getElementById('feature-bullets').children[2].children[i].innerText)
+                const rsp_bullet_html = '<p style="font-size:14px; line-height: 18px;">*' + request.bullets[i] +'</p>'
+                rsp_bullets_html.push(rsp_bullet_html)
+            }
+            document.getElementById('gptRspBullet').innerHTML = rsp_bullets_html.join('')
             console.log('request>>>>>>>>>>>>>>>>>>>>>',request)
         }
     )
