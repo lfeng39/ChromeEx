@@ -59,7 +59,7 @@ chrome.runtime.onMessage.addListener(function(request, sender, response)
   if(request.action === 'aiRegnerate')
   {
     console.log('aiRegnerate requeset msg:', request.listing_bullets)
-    const j21_api_key = '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'
+    const j21_api_key = 'aaa'
     const postUrl = ['http://localhost:8080', 'https://api.openai.com/v1/chat/completions']
     // const postUrl = 'https://api.openai.com/v1/chat/completions';
     const headers = {
