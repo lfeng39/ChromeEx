@@ -103,15 +103,16 @@ function aiRegnerate()
         function(request)
         {
             document.getElementById('gptRspTitle').innerHTML = '<h1 style="font-size: 16px; line-height: 18px; margin-bottom: 15px;">' + request.title + '</h1>'
-            const rsp_bullets_html = []
-            for(i=0; i<request.bullets.length; i++)
-            {
-                // bullets.push(doc.getElementById('feature-bullets').children[2].children[i].innerText)
-                const rsp_bullet_html = '<p style="font-size:14px; line-height: 18px;">*' + request.bullets[i] +'</p>'
-                rsp_bullets_html.push(rsp_bullet_html)
-            }
-            document.getElementById('gptRspBullet').innerHTML = rsp_bullets_html.join('')
-            console.log('request>>>>>>>>>>>>>>>>>>>>>',request)
+            // const rsp_bullets_html = []
+            // for(i=0; i<request.bullets.length; i++)
+            // {
+            //     // bullets.push(doc.getElementById('feature-bullets').children[2].children[i].innerText)
+            //     const rsp_bullet_html = '<p style="font-size:14px; line-height: 18px;">*' + request.bullets[i] +'</p>'
+            //     rsp_bullets_html.push(rsp_bullet_html)
+            // }
+            // document.getElementById('gptRspBullet').innerHTML = rsp_bullets_html.join('')
+            console.log('request>>>',request)
+            console.log('request>>>',JSON.parse(request).Title)
         }
     )
 }

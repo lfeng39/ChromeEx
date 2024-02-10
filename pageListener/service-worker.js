@@ -65,11 +65,10 @@ chrome.runtime.onMessage.addListener(function(request, sender, response)
     // const postUrl = 'https://api.openai.com/v1/chat/completions';
     const headers = {
       'Content-Type': 'application/json',
-      'Authorization': `Bearer ${j21_api_key}`,
+      // 'Authorization': `Bearer ${j21_api_key}`,
     }
     const data = {
-      // title: request.listing_title,
-      // bullets: request.listing_bullets
+      
       model: "gpt-3.5-turbo",
       messages: [
           // {
@@ -82,7 +81,11 @@ chrome.runtime.onMessage.addListener(function(request, sender, response)
           }
       ]
     }
-    fetch(postUrl[1], {method: 'POST', headers: headers, body: JSON.stringify(data)})
+    const testdata = {
+      title: request.listing_title,
+      bullets: request.listing_bullets
+    }
+    fetch(postUrl[0], {method: 'POST', headers: headers, body: JSON.stringify(testdata)})
       .then(response =>
       {
         if (!response.ok) {
@@ -99,7 +102,11 @@ chrome.runtime.onMessage.addListener(function(request, sender, response)
         console.log('\n')
         console.log('GPT-3.5 messages:', data.choices[0].message)
         console.log('\n')
-        console.log('GPT-3.5 Content:', data.choices[0].message.content)
+        console.log(data.choices[0].message.content.split('Bullet Points:')[1])
+        console.log('\n')
+        console.log(data.choices[0].message.content.split('Bullet Points: ')[1].match(/@([^@]*)@/g))
+        console.log('\n')
+        console.log(data.choices[0].message.content.split('Bullet Points: ')[1].split('@').slice(1))
         response(data.choices[0].message.content)
         // const gptRsp = data.messages[0].content
         // const gptRsp = data.choices[0].message.content
@@ -111,3 +118,8 @@ chrome.runtime.onMessage.addListener(function(request, sender, response)
     return true
   }
 })
+
+function parseStr(str)
+{
+  str.split('Bullet Points')
+}
