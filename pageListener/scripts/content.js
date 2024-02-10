@@ -23,12 +23,11 @@ chrome.runtime.onMessage.addListener(function(request, sender, response)
     }
     a_i_regnerate_module_div.id = 't_b_bg'
     a_i_regnerate_module_div.innerHTML = `
-    // <style>
-    //     .hi{
-    //         font-size: 18px;
-    //         color: #333;
-    //     }
-    // </style>
+    <style>
+        .hi{
+            height: 50px;
+        }
+    </style>
     <div id="t_b">
         <div style="display: flex; justify-content: space-between;">
             <div><h1 class="hi">LittleKris TEST</h1></div>

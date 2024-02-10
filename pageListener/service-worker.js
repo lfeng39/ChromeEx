@@ -59,7 +59,7 @@ chrome.runtime.onMessage.addListener(function(request, sender, response)
   if(request.action === 'aiRegnerate')
   {
     console.log('aiRegnerate requeset msg:', request.listing_bullets)
-    const j21_api_key = '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'
+    const j21_api_key = 'aaa'
     const postUrl = ['http://localhost:8080', 'https://api.openai.com/v1/chat/completions']
     // const postUrl = 'https://api.openai.com/v1/chat/completions';
     const headers = {
@@ -94,21 +94,14 @@ chrome.runtime.onMessage.addListener(function(request, sender, response)
       })
       .then(data =>
       {
-        // console.log('API Health Response:', data.messages)
-        // const da = data
-        // console.log('nodeSer Response:', typeof(da), da)
         console.log('GPT-3.5 data:', data.choices[0])
         console.log('\n')
         console.log('GPT-3.5 messages:', data.choices[0].message)
         console.log('\n')
         console.log(data.choices[0].message.content.split('Bullet Points: ')[0])
-        // console.log('\n')
-        // console.log(data.choices[0].message.content.split('Bullet Points: ')[1].match(/@([^@]*)@/g))
         console.log('\n')
         console.log(data.choices[0].message.content.split('Bullet Points: ')[1].split('@').slice(1))
         response(parseStr(data.choices[0].message.content))
-        // const gptRsp = data.messages[0].content
-        // const gptRsp = data.choices[0].message.content
       })
       .catch(error =>
       {
