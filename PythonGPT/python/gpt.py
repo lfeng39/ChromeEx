@@ -1,13 +1,9 @@
 from openai import OpenAI
 import openai
-l39_api_key = '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'
-# j21_api_key = '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'
-j21_api_key = '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'
+l39_api_key = 'bbb'
+j21_api_key = 'aaa'
 
 
-# client = OpenAI(
-#   organization='org-rddDZuCDVt67fXKoKIwK9dH3',
-# )
 
 # msg = input('')
 

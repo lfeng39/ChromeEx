@@ -24,7 +24,7 @@ document.getElementById("submit-button").addEventListener("click", async () => {
 });
 
 async function chatGPT(message) {
-	const j21_api_key = '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'
+	const j21_api_key = 'aaa'
 	const postUrl = 'https://api.openai.com/v1/chat/completions';
 
 	const data = {

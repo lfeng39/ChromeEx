@@ -19,7 +19,7 @@ function reS(request, sender, sendResponse)
   if(request.action === 'amazon')
   {
     console.log(request.message)
-    const j21_api_key = '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'
+    const j21_api_key = 'aaa'
     // const postUrl = 'http://localhost:8080';
     const postUrl = 'https://api.openai.com/v1/chat/completions';
     fetch
