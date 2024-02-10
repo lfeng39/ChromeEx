@@ -23,30 +23,36 @@ chrome.runtime.onMessage.addListener(function(request, sender, response)
     }
     a_i_regnerate_module_div.id = 't_b_bg'
     a_i_regnerate_module_div.innerHTML = `
+    // <style>
+    //     .hi{
+    //         font-size: 18px;
+    //         color: #333;
+    //     }
+    // </style>
     <div id="t_b">
         <div style="display: flex; justify-content: space-between;">
-            <div><h1>LittleKris TEST</h1></div>
+            <div><h1 class="hi">LittleKris TEST</h1></div>
             <div><h1 id="closed">X</h1></div>
         </div>
         <div style="display: flex; justify-content: space-between; height:90%; border-radius:8px; background-color: rgb(250, 250, 250, 0.8); overflow: hidden; overflow-y: scroll;">
-            <div id="bullets" style="width:33%; height: auto; margin: 10px 0; padding: 10px;">
-                <div><h1>Before</h1></div>
+            <div id="bullets" style="width:33%; height: auto; padding: 10px;">
+                <div><h3 style="height: 30px;">Before</h3></div>
                 <div><h5>Title</h5></div>
                 <div></div>
                 <div><h5>BulletPoint</h5></div>
                 <div></div>
             </div>
-            <div style="width:33%; height: auto; margin: 10px 0; padding: 10px;">
-                <div><h1>A.I.Upgrade</h1></div>
+            <div style="width:33%; height: auto; padding: 10px;">
+                <div><h3 style="height: 30px;">A.I.Upgrade</h3></div>
                 <div><h5>Title</h5></div>
-                <div id="gptRspTitle"><h1>GPT-2</h1></div>
+                <div id="gptRspTitle"><p>GPT-2</p></div>
                 <div><h5>BulletPoint</h5></div>
                 <div id="gptRspBullet"></div>
             </div>
-            <div style="width:33%; height: auto; margin: 10px 0; padding: 10px;">
-                <div><h1>GPT-Regnerate</h1></div>
+            <div style="width:33%; height: auto; padding: 10px;">
+                <div><h3 style="height: 30px;">GPT-Regnerate</h3></div>
                 <div><h5>Title</h5></div>
-                <div><h1>GPT-2</h1></div>
+                <div><p>GPT-2</p></div>
                 <div><h5>BulletPoint</h5></div>
                 <div></div>
             </div>
@@ -103,16 +109,16 @@ function aiRegnerate()
         function(request)
         {
             document.getElementById('gptRspTitle').innerHTML = '<h1 style="font-size: 16px; line-height: 18px; margin-bottom: 15px;">' + request.title + '</h1>'
-            // const rsp_bullets_html = []
-            // for(i=0; i<request.bullets.length; i++)
-            // {
-            //     // bullets.push(doc.getElementById('feature-bullets').children[2].children[i].innerText)
-            //     const rsp_bullet_html = '<p style="font-size:14px; line-height: 18px;">*' + request.bullets[i] +'</p>'
-            //     rsp_bullets_html.push(rsp_bullet_html)
-            // }
-            // document.getElementById('gptRspBullet').innerHTML = rsp_bullets_html.join('')
+            const rsp_bullets_html = []
+            for(i=0; i<request.bullets.length; i++)
+            {
+                // bullets.push(doc.getElementById('feature-bullets').children[2].children[i].innerText)
+                const rsp_bullet_html = '<p style="font-size:14px; line-height: 18px;">*' + request.bullets[i] +'</p>'
+                rsp_bullets_html.push(rsp_bullet_html)
+            }
+            document.getElementById('gptRspBullet').innerHTML = rsp_bullets_html.join('')
             console.log('request>>>',request)
-            console.log('request>>>',JSON.parse(request).Title)
+            // console.log('request>>>',JSON.parse(request))
         }
     )
 }

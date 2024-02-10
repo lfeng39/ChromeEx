@@ -59,13 +59,12 @@ chrome.runtime.onMessage.addListener(function(request, sender, response)
   if(request.action === 'aiRegnerate')
   {
     console.log('aiRegnerate requeset msg:', request.listing_bullets)
-    // const j21_api_key = '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'
-    const j21_api_key = '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'
+    const j21_api_key = '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'
     const postUrl = ['http://localhost:8080', 'https://api.openai.com/v1/chat/completions']
     // const postUrl = 'https://api.openai.com/v1/chat/completions';
     const headers = {
       'Content-Type': 'application/json',
-      // 'Authorization': `Bearer ${j21_api_key}`,
+      'Authorization': `Bearer ${j21_api_key}`,
     }
     const data = {
       
@@ -77,7 +76,7 @@ chrome.runtime.onMessage.addListener(function(request, sender, response)
           // },
           {
               "role" : "user",
-              "content": 'The amazon listing title is: ' + request.listing_title + ' and bullet points is: ' + request.listing_bullets + ', regenerate an amazon listing title and bullet points with an inspirational tone, each within 170-200 bytes'
+              "content": 'The amazon listing title is: "' + request.listing_title + '" and bullet points is: "' + request.listing_bullets + '", regenerate an amazon listing title and bullet points with an inspirational tone, each within 170-200 bytes. do not use like 1, 2, 3, please use @ as the begining of the bullet points'
           }
       ]
     }
@@ -102,12 +101,12 @@ chrome.runtime.onMessage.addListener(function(request, sender, response)
         console.log('\n')
         console.log('GPT-3.5 messages:', data.choices[0].message)
         console.log('\n')
-        console.log(data.choices[0].message.content.split('Bullet Points:')[1])
-        console.log('\n')
-        console.log(data.choices[0].message.content.split('Bullet Points: ')[1].match(/@([^@]*)@/g))
+        console.log(data.choices[0].message.content.split('Bullet Points: ')[0])
+        // console.log('\n')
+        // console.log(data.choices[0].message.content.split('Bullet Points: ')[1].match(/@([^@]*)@/g))
         console.log('\n')
         console.log(data.choices[0].message.content.split('Bullet Points: ')[1].split('@').slice(1))
-        response(data.choices[0].message.content)
+        response(parseStr(data.choices[0].message.content))
         // const gptRsp = data.messages[0].content
         // const gptRsp = data.choices[0].message.content
       })
@@ -121,5 +120,9 @@ chrome.runtime.onMessage.addListener(function(request, sender, response)
 
 function parseStr(str)
 {
-  str.split('Bullet Points')
+  const data = {
+    title: str.split('Bullet Points: ')[0].substring(7),
+    bullets: str.split('Bullet Points: ')[1].split('@').slice(1)
+  }
+  return data
 }
