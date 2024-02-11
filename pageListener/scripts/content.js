@@ -24,13 +24,17 @@ chrome.runtime.onMessage.addListener(function(request, sender, response)
     a_i_regnerate_module_div.id = 't_b_bg'
     a_i_regnerate_module_div.innerHTML = `
     <style>
-        .hi{
-            height: 50px;
+        .-focus-{
+            height: 35px;
+            border-bottom: 2px solid #000;
         }
     </style>
     <div id="t_b">
-        <div style="display: flex; justify-content: space-between;">
-            <div><h1 class="hi">LittleKris TEST</h1></div>
+        <div style="height: 50px; display: flex; justify-content: space-between;">
+            <div style="width: 50%;  display: flex;">
+                <div style="margin-right: 20px;"><h1>LittleKris</h1></div>
+                <!--div style="margin-right: 20px;"><h1>TEST</h1></div-->
+            </div>
             <div><h1 id="closed">X</h1></div>
         </div>
         <div style="display: flex; justify-content: space-between; height:90%; border-radius:8px; background-color: rgb(250, 250, 250, 0.8); overflow: hidden; overflow-y: scroll;">
@@ -112,7 +116,7 @@ function aiRegnerate()
             for(i=0; i<request.bullets.length; i++)
             {
                 // bullets.push(doc.getElementById('feature-bullets').children[2].children[i].innerText)
-                const rsp_bullet_html = '<p style="font-size:14px; line-height: 18px;">*' + request.bullets[i] +'</p>'
+                const rsp_bullet_html = '<p style="font-size:14px; line-height: 18px;">*' + request.bullets[i+1] +'</p>'
                 rsp_bullets_html.push(rsp_bullet_html)
             }
             document.getElementById('gptRspBullet').innerHTML = rsp_bullets_html.join('')

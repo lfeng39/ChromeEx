@@ -58,8 +58,9 @@ chrome.runtime.onMessage.addListener(function(request, sender, response)
   }
   if(request.action === 'aiRegnerate')
   {
-    console.log('aiRegnerate requeset msg:', request.listing_bullets)
-    const j21_api_key = 'aaa'
+    const content = 'The amazon listing title is: "' + request.listing_title + '" and bullet points is: "' + request.listing_bullets + '", regenerate an amazon listing title and bullet points with an inspirational tone, each within 170-200 bytes. do not divide the bullet points into paragraphs, just use @ separate them.'
+    console.log('aiRegnerate requeset msg:', content)
+    const j21_api_key = 'aaaaaa'
     const postUrl = ['http://localhost:8080', 'https://api.openai.com/v1/chat/completions']
     // const postUrl = 'https://api.openai.com/v1/chat/completions';
     const headers = {
@@ -76,7 +77,7 @@ chrome.runtime.onMessage.addListener(function(request, sender, response)
           // },
           {
               "role" : "user",
-              "content": 'The amazon listing title is: "' + request.listing_title + '" and bullet points is: "' + request.listing_bullets + '", regenerate an amazon listing title and bullet points with an inspirational tone, each within 170-200 bytes. do not use like 1, 2, 3, please use @ as the begining of the bullet points'
+              "content": content
           }
       ]
     }
@@ -84,7 +85,7 @@ chrome.runtime.onMessage.addListener(function(request, sender, response)
       title: request.listing_title,
       bullets: request.listing_bullets
     }
-    fetch(postUrl[0], {method: 'POST', headers: headers, body: JSON.stringify(testdata)})
+    fetch(postUrl[1], {method: 'POST', headers: headers, body: JSON.stringify(data)})
       .then(response =>
       {
         if (!response.ok) {
@@ -98,9 +99,9 @@ chrome.runtime.onMessage.addListener(function(request, sender, response)
         console.log('\n')
         console.log('GPT-3.5 messages:', data.choices[0].message)
         console.log('\n')
-        console.log(data.choices[0].message.content.split('Bullet Points: ')[0])
+        console.log(data.choices[0].message.content)
         console.log('\n')
-        console.log(data.choices[0].message.content.split('Bullet Points: ')[1].split('@').slice(1))
+        console.log(typeof data.choices[0].message.content.split('@'))
         response(parseStr(data.choices[0].message.content))
       })
       .catch(error =>
@@ -114,8 +115,10 @@ chrome.runtime.onMessage.addListener(function(request, sender, response)
 function parseStr(str)
 {
   const data = {
-    title: str.split('Bullet Points: ')[0].substring(7),
-    bullets: str.split('Bullet Points: ')[1].split('@').slice(1)
+    // title: str.split('Bullet Points: ')[0].substring(7),
+    // bullets: str.split('Bullet Points: ')[1].split('@').slice(1)
+    title: str.split('@')[0].substring(1),
+    bullets: str.split('@')
   }
   return data
 }
