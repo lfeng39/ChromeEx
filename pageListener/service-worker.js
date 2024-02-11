@@ -60,7 +60,7 @@ chrome.runtime.onMessage.addListener(function(request, sender, response)
   {
     const content = 'The amazon listing title is: "' + request.listing_title + '" and bullet points is: "' + request.listing_bullets + '", regenerate an amazon listing title and bullet points with an inspirational tone, each within 170-200 bytes. do not divide the bullet points into paragraphs, just use @ separate them.'
     console.log('aiRegnerate requeset msg:', content)
-    const j21_api_key = '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'
+    const j21_api_key = 'aaa'
     const postUrl = ['http://localhost:8080', 'https://api.openai.com/v1/chat/completions']
     // const postUrl = 'https://api.openai.com/v1/chat/completions';
     const headers = {

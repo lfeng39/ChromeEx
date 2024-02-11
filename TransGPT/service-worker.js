@@ -34,7 +34,7 @@ chrome.runtime.onMessage.addListener
     (request, sender, response) => {
       console.log('frome content.js:::', request.txt)
       const content = request.txt + ' 请翻译，并详细讲解。'
-      const j21_api_key = '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'
+      const j21_api_key = 'sss'
       const postUrl = ['http://localhost:8080', 'https://api.openai.com/v1/chat/completions']
       // const postUrl = 'https://api.openai.com/v1/chat/completions';
       const headers = {
