@@ -1,0 +1,48 @@
+{
+    "manifest_version": 3,
+    "name": "A.I.Listing",
+    "description": "Experience our AI-Powered Amazon Listing Optimizer for e-commerce success. Maximize sales potential with optimized product listings.",
+    "version": "1.0",
+    "author":
+    {
+        "email": "lfeng0309@gmail.com"
+    },
+    "icons":
+    {
+        "128":"images/L.K.png"
+    },
+    "action":
+    {
+        "default_icon": "images/L.K.png",
+        "default_title": "A.I.Listing"
+    },
+    "permissions":
+    [
+        "tabs",
+        "webNavigation"
+    ],
+    "omnibox":
+    {
+        "keyword": "newTab"
+    },
+    "host_permissions":
+    [
+        "https://api.openai.com/*",
+        "https://www.amazon.com/*"
+    ],
+    "content_scripts":
+    [
+        {
+            "matches": ["https://www.amazon.com/*"],
+            "js": ["scripts/content.js"]
+        }
+    ],
+    "content_security_policy": {
+        "extension_pages": "script-src 'self'; object-src 'self'; img-src 'self' data: filesystem: chrome-extension:;"
+    },
+    "background":
+    {
+        "service_worker": "service-worker.js",
+        "type": "module"
+    }
+}

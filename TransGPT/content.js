@@ -1,19 +1,26 @@
 window.addEventListener(
     'mouseup',
-    function go() {
+    
+    function go(event) {
         selTxt = window.getSelection().toString()
-        // this.alert('lfeng39')
-        if (selTxt) {
-            chrome.runtime.sendMessage
-                (
+        screenx = event.screenX
+        screeny = event.screenY
+
+        if (selTxt)
+        {
+            
+                chrome.runtime.sendMessage(
                     {
-                        message: 'nodejSer',
-                        txt: selTxt
+                        action: 'trans',
+                        txt: selTxt,
+                        screenx: screenx,
+                        screeny: screeny
                     },
-                    (response) => {
-                        this.alert(response)
-                    }
+                    // (response) => {
+                    //     this.alert(response)
+                    // }
                 )
+
         }
     }
 )

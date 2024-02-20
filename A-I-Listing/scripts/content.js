@@ -2,14 +2,18 @@ chrome.runtime.onMessage.addListener(function(request, sender, response)
 {
     // create ai trigger module
     const littl_kris_module = document.getElementById('dp-container').children[0]
+    // const littl_kris_module = document.getElementById('rightCol')
     const a_i_regnerate_module = document.getElementById('a-page')
     const littl_kris_module_div = document.createElement('div')
     const a_i_regnerate_module_div = document.createElement('div')
     littl_kris_module_div.style = 'width: 100%; min-height: 50px; border-radius:8px; border:1px solid #f5f5f5; background-color: #fcfcfc; margin: 18px 0';
     littl_kris_module_div.innerHTML = `
     <div style="text-align: center; margin: 10px; padding: 10px;">
-        <h1>LittleKris</h1>
-        <button id="ai_btn" style="height: 35px; border-radius:8px;">A.I.Regnerate Title & Bullet</button>
+        <div style="text-align: center; margin: 0 auto; align-items: center; width:200px; display: flex;">
+            <div style="margin-right: 10px;"><img width="30" height="30" src="http://i.giphy.com/3og0ISeflb7vrNzy2A.gif""></div>
+            <div><h1>A.I.Listing</h1></div>
+        </div>
+        <button id="ai_btn" style="width:200px; height: 35px; border-radius:8px;">A.I.Regnerate Title & Bullet</button>
     </div>
     `
     // create ai module
@@ -21,47 +25,38 @@ chrome.runtime.onMessage.addListener(function(request, sender, response)
     {
         a_i_regnerate_module_div.style = 'display: none; position: fixed; z-index:1000; width: 100%; height: 100%; padding-top:'+ (window.screen.availHeight*0.5-window.screen.availHeight*0.6*0.6) +'px; background-color: rgb(0, 0, 0, 0.6);'
     }
-    a_i_regnerate_module_div.id = 't_b_bg'
+
+    // const img_LK = chrome.runtime.getURL('images/L.K.png')
+
+    a_i_regnerate_module_div.id = 'littleKris_t_b_bg'
     a_i_regnerate_module_div.innerHTML = `
-        <style>
-            .-focus-{
-                height: 35px;
-                border-bottom: 2px solid #000;
-            }
-        </style>
-        <div id="t_b">
+        <div id="littleKris_t_b">
             <div style="height: 50px; display: flex; justify-content: space-between;">
                 <div style="width: 50%;  display: flex;">
-                    <div style="margin-right: 20px;"><h1>LittleKris</h1></div>
+                    <div style="margin-right: 20px;"><h1>A.I.Listing</h1></div>
                     <!--div style="margin-right: 20px;"><h1>TEST</h1></div-->
                 </div>
                 <div><h1 id="closed">X</h1></div>
             </div>
             <div style="display: flex; justify-content: space-between; height:90%; border-radius:8px; background-color: rgb(250, 250, 250, 0.8); overflow: hidden; overflow-y: scroll;">
-                <div id="bullets" style="width:33%; height: auto; padding: 10px;">
-                    <div><h3 style="height: 30px;">Before</h3></div>
+                <div id="bullets" style="width:50%; height: auto; padding: 10px;">
+                    <div><h3 style="height: 30px;">Current</h3></div>
                     <div><h5>Title</h5></div>
                     <div></div>
                     <div><h5>BulletPoints</h5></div>
                     <div></div>
                 </div>
-                <div style="width:33%; height: auto; padding: 10px;">
+                <div style="width:50%; height: auto; padding: 10px;">
                     <div><h3 style="height: 30px;">A.I.Upgrade</h3></div>
                     <div><h5>Title</h5></div>
                     <div id="gptRspTitle" style="min-height: 72px;"><img width="50" height="50" src="http://i.giphy.com/3og0ISeflb7vrNzy2A.gif" style="margin-bottom: 10px;"></div>
                     <div><h5>BulletPoints</h5></div>
                     <div id="gptRspBullet"><img width="50" height="50" src="http://i.giphy.com/3og0ISeflb7vrNzy2A.gif"></div>
                 </div>
-                <div style="width:33%; height: auto; padding: 10px;">
-                    <div><h3 style="height: 30px;">GPT-Regnerate</h3></div>
-                    <div><h5>Title</h5></div>
-                    <div><p>GPT-2</p></div>
-                    <div><h5>BulletPoints</h5></div>
-                    <div></div>
-                </div>
             </div>
         </div>
         `
+    // document.addEventListener('DOMContentLoaded', function () {littl_kris_module.insertAdjacentElement('beforebegin', littl_kris_module_div)})
     littl_kris_module.insertAdjacentElement('beforebegin', littl_kris_module_div)
     a_i_regnerate_module.insertAdjacentElement('beforebegin', a_i_regnerate_module_div)
     document.getElementById('ai_btn').onclick = aiRegnerate
@@ -118,15 +113,15 @@ function aiRegnerate()
     document.getElementById('bullets').children[4].innerHTML = getBullets()[1].join('')
 
     const main_width = window.getComputedStyle(dp)['max-width']
-    document.getElementById('t_b_bg').style.display = ''
+    document.getElementById('littleKris_t_b_bg').style.display = ''
     // main_dp_width value for ai module
     if(window.screen.availHeight < 1000)
     {
-        document.getElementById('t_b').style = 'max-width:'+ main_width +'; height:'+ window.screen.availHeight*0.8 +'px; border-radius:8px; background-color: rgb(250, 250, 250, 0.8); margin: 0 auto; padding: 20px;'
+        document.getElementById('littleKris_t_b').style = 'max-width:'+ main_width +'; height:'+ window.screen.availHeight*0.8 +'px; border-radius:8px; background-color: rgb(250, 250, 250, 0.8); margin: 0 auto; padding: 20px;'
     }
     else
     {
-        document.getElementById('t_b').style = 'max-width:'+ main_width +'; height:'+ window.screen.availHeight*0.6 +'px; border-radius:8px; background-color: rgb(250, 250, 250, 0.8); margin: 0 auto; padding: 20px;'
+        document.getElementById('littleKris_t_b').style = 'max-width:'+ main_width +'; height:'+ window.screen.availHeight*0.6 +'px; border-radius:8px; background-color: rgb(250, 250, 250, 0.8); margin: 0 auto; padding: 20px;'
     }    
     chrome.runtime.sendMessage(
         { action: "aiRegnerate", listing_title: title, listing_bullets: getBullets()[0] },
@@ -149,5 +144,5 @@ function aiRegnerate()
 }
 function closed()
 {
-    document.getElementById('t_b_bg').style.display = 'none'
+    document.getElementById('littleKris_t_b_bg').style.display = 'none'
 }

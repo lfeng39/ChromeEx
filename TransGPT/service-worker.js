@@ -7,39 +7,20 @@ chrome.runtime.onInstalled.addListener((tab) =>
   });
 });
 
-// // import {franc} from './franc/index.js'
-// chrome.action.onClicked.addListener
-// (
-//   (tab) => 
-//   {
-//     console.log(tab.url,tab.id,tab.index,tab.width, tab.title)
-//   }
-// )
-
-// const reqHead = {
-//   method: 'POST',
-//   headers:
-//   {
-//   'Content-Type': 'application/json',
-//   // 'Authorization': `Bearer ${apiKey}`
-//   },
-//   body:
-//   JSON.stringify({
-//   messages: request.txt
-//   })
-// }
 
 chrome.runtime.onMessage.addListener
-  (
-    (request, sender, response) => {
+(
+  function(request, sender, response)
+  {
+    if(request.action === 'trans')
+    {
       console.log('frome content.js:::', request.txt)
       const content = request.txt + ' 请翻译，并详细讲解。'
-      const j21_api_key = 'sss'
+      const j21_translate_api_key = 'aaa'
       const postUrl = ['http://localhost:8080', 'https://api.openai.com/v1/chat/completions']
-      // const postUrl = 'https://api.openai.com/v1/chat/completions';
       const headers = {
         'Content-Type': 'application/json',
-        'Authorization': `Bearer ${j21_api_key}`,
+        'Authorization': `Bearer ${j21_translate_api_key}`,
       }
       const data = {
         
@@ -56,10 +37,11 @@ chrome.runtime.onMessage.addListener
         ]
       }
       const testdata = {
-        title: request.listing_title,
-        bullets: request.listing_bullets
+        choices: [
+          { message: { content: content}}
+        ]
       }
-      fetch(postUrl[1], {method: 'POST', headers: headers, body: JSON.stringify(data)})
+      fetch(postUrl[0], {method: 'POST', headers: headers, body: JSON.stringify(testdata)})
         .then(response =>
         {
           if (!response.ok) {
@@ -69,14 +51,38 @@ chrome.runtime.onMessage.addListener
         })
         .then(data =>
         {
-          console.log('GPT-3.5 data:', data.choices[0])
-          console.log('\n')
-          console.log('GPT-3.5 messages:', data.choices[0].message)
-          console.log('\n')
+          // console.log('GPT-3.5 data:', data.choices[0])
+          // console.log('\n')
+          // console.log('GPT-3.5 messages:', data.choices[0].message)
+          // console.log('\n')
           console.log(data.choices[0].message.content)
           // console.log('\n')
           // console.log(typeof data.choices[0].message.content.split('@'))
-          response(data.choices[0].message.content)
+          // response(data.choices[0].message.content)
+  
+          chrome.windows.create(
+            {
+              url: chrome.runtime.getURL('popup/popup-win.html?selTxt='+request.txt),
+              type: 'popup',
+              width: 600,
+              height: 800,
+              top: request.screeny,
+              left: request.screenx
+            },
+            function(popupWindow)
+            {
+              // 向弹窗发送数据
+              chrome.tabs.onUpdated.addListener(function(tabId, changeInfo, tab)
+              {
+                if (tabId === popupWindow.tabs[0].id && changeInfo.status === 'complete')
+                {
+                  // 弹窗加载完成后发送数据
+                  chrome.tabs.sendMessage(tabId, { action: 'fillData', data: data.choices[0].message.content });
+                }
+              })
+            }
+          )
+          // chrome.runtime.sendMessage({action: 'popup', data: data})
         })
         .catch(error =>
         {
@@ -84,37 +90,6 @@ chrome.runtime.onMessage.addListener
         })
       return true
     }
-
-  )
-
-// const http = require('http')
-// const server = http.createServer(gptSer)
-// server.listen(8080)
-
-// function gptSer(request, response)
-// {
-//     console.log(request)
-//     response.write('lfeng say hello')
-//     response.end()
-// }
-
-// function fet(rsp)
-// {
-//   const nodeServerUrl = 'http://localhost:8080';
-
-//   // 使用 fetch 发送 GET 请求
-//   fetch(nodeServerUrl)
-//     .then(response => {
-//       if (!response.ok) {
-//         throw new Error(`HTTP error! Status: ${response.status}`);
-//       }
-//       return response.text();
-//     })
-//     .then(data => {
-//       rsp({message: data})
-//       console.log('Response from Node.js server:', data);
-//     })
-//     .catch(error => {
-//       console.error('Error:', error);
-//     });
-// }
+    console.log(data.choices[0].message.content)
+  }
+)

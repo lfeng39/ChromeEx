@@ -58,14 +58,16 @@ chrome.runtime.onMessage.addListener(function(request, sender, response)
   }
   if(request.action === 'aiRegnerate')
   {
-    const content = 'The amazon listing title is: "' + request.listing_title + '" and bullet points is: "' + request.listing_bullets + '", regenerate an amazon listing title and bullet points with an inspirational tone, each within 170-200 bytes. do not divide the bullet points into paragraphs, just use @ separate them.'
+    const content = 'The amazon listing title is: "' + request.listing_title + '" and bullet points is: "' + request.listing_bullets + '", regenerate an amazon listing title and 5 bullet points with an inspirational tone, each within 170-200 bytes. please provide in JSON format, including the keys title and bullet_points'
+    // const content = 'amazon listing 的标题如下: "' + request.listing_title + '" 五点描述如下: "' + request.listing_bullets + '", 请优化他们 使用鼓舞人心的语气 请以JSON格式提供 其中包含以下键 title, bullet_points'
     console.log('aiRegnerate requeset msg:', content)
-    const j21_api_key = 'aaa'
+    const j21_listing_api_key = 'aaa'
+    const j21_translate_api_key = 'aaa'
     const postUrl = ['http://localhost:8080', 'https://api.openai.com/v1/chat/completions']
     // const postUrl = 'https://api.openai.com/v1/chat/completions';
     const headers = {
       'Content-Type': 'application/json',
-      'Authorization': `Bearer ${j21_api_key}`,
+      'Authorization': `Bearer ${j21_listing_api_key}`,
     }
     const data = {
       
@@ -101,8 +103,9 @@ chrome.runtime.onMessage.addListener(function(request, sender, response)
         console.log('\n')
         console.log(data.choices[0].message.content)
         console.log('\n')
-        console.log(typeof data.choices[0].message.content.split('@'))
+        console.log(JSON.parse(data.choices[0].message.content))
         response(parseStr(data.choices[0].message.content))
+        // response(data.choices[0].message.content)
       })
       .catch(error =>
       {
@@ -114,11 +117,15 @@ chrome.runtime.onMessage.addListener(function(request, sender, response)
 
 function parseStr(str)
 {
+  const aaa = JSON.parse(str)
   const data = {
+    title: aaa.title,
+    bullets: aaa.bullet_points
     // title: str.split('Bullet Points: ')[0].substring(7),
     // bullets: str.split('Bullet Points: ')[1].split('@').slice(1)
-    title: str.split('@')[0].substring(1),
-    bullets: str.split('@')
+
+    // title: str.split('@')[0].substring(1, -1),
+    // bullets: str.split('@')
   }
   return data
 }
